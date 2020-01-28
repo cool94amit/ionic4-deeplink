@@ -20,8 +20,23 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
+      this.handleBranch();
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+    });
+  }
+
+  handleBranch = () => {
+    // only on devices
+    if (!this.platform.is('cordova')) { return }
+    // tslint:disable-next-line: no-string-literal
+    const Branch = window['Branch'];
+    Branch.setDebug(true)
+    Branch.initSession().then(data => {
+      if (data['+clicked_branch_link']) {
+        // read deep link data on click
+        alert('Deep Link Data: ' + JSON.stringify(data));
+      }
     });
   }
 }
